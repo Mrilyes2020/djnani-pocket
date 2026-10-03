@@ -32,7 +32,7 @@ export function detectAccount(words: string[]): { account: Account | null; rest:
   let account: Account | null = null;
   const rest: string[] = [];
   for (const w of words) {
-    const lw = w.toLowerCase().replace(/^(من|في|ل|لل|بال|ب)(?=.)/, (p) => p);
+    const lw = w.toLowerCase();
     const bare = lw.replace(/^(من|في|لل|ل|بال|ب)/, "");
     if (POCKET_WORDS.includes(lw) || POCKET_WORDS.includes(bare)) account = "pocket";
     else if (BANK_WORDS.includes(lw) || BANK_WORDS.includes(bare)) account = "bank";
@@ -85,7 +85,7 @@ export function parseLoan(raw: string): LoanAction | null {
   for (const w of rest) {
     const a = amount === null ? parseAmountToken(w) : null;
     if (a !== null) amount = a;
-    else if (!["من", "ل", "الى", "لـ"].includes(w)) nameParts.push(w.replace(/^ل(?=\S{3,})/, (x) => (m[1] === "سددت" || m[1] === "رديت" ? "" : x)));
+    else if (!["من", "ل", "الى", "لـ"].includes(w)) nameParts.push(w);
   }
   const person = nameParts.join(" ").trim();
   if (!amount || !person) return null;
