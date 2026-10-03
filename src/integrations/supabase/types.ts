@@ -14,7 +14,117 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      bot_logs: {
+        Row: {
+          created_at: string
+          details: Json | null
+          id: string
+          level: string
+          message: string
+        }
+        Insert: {
+          created_at?: string
+          details?: Json | null
+          id?: string
+          level?: string
+          message: string
+        }
+        Update: {
+          created_at?: string
+          details?: Json | null
+          id?: string
+          level?: string
+          message?: string
+        }
+        Relationships: []
+      }
+      category_keywords: {
+        Row: {
+          category: string
+          keyword: string
+        }
+        Insert: {
+          category: string
+          keyword: string
+        }
+        Update: {
+          category?: string
+          keyword?: string
+        }
+        Relationships: []
+      }
+      loan_payments: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          person: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          person: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          person?: string
+        }
+        Relationships: []
+      }
+      loans: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          person: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          person: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          person?: string
+        }
+        Relationships: []
+      }
+      transactions: {
+        Row: {
+          account: string
+          amount: number
+          category: string
+          created_at: string
+          id: string
+          note: string | null
+          transfer_id: string | null
+        }
+        Insert: {
+          account: string
+          amount: number
+          category?: string
+          created_at?: string
+          id?: string
+          note?: string | null
+          transfer_id?: string | null
+        }
+        Update: {
+          account?: string
+          amount?: number
+          category?: string
+          created_at?: string
+          id?: string
+          note?: string | null
+          transfer_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
