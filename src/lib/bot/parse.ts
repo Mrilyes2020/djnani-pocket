@@ -20,7 +20,7 @@ export function normalize(text: string): string {
 export function parseAmountToken(tok: string): number | null {
   const m = tok.match(/^(\d+(?:[.,]\d+)?)(k|ك)?$/i);
   if (!m) return null;
-  let n = parseFloat(m[1].replace(",", "."));
+  let n = parseFloat(m[1]!.replace(",", "."));
   if (m[2]) n *= 1000;
   return Number.isFinite(n) && n > 0 ? n : null;
 }
@@ -61,7 +61,7 @@ export function parseTransaction(raw: string): ParsedTx | null {
   const t = normalize(raw);
   const m = t.match(/^([+-])?\s*(\d+(?:[.,]\d+)?(?:k|ك)?)(?:\s+(.*))?$/i);
   if (!m) return null;
-  const n = parseAmountToken(m[2]);
+  const n = parseAmountToken(m[2]!);
   if (n === null) return null;
   const words = (m[3] ?? "").split(" ").filter(Boolean);
   const { account, rest } = detectAccount(words);
@@ -78,12 +78,12 @@ export function parseLoan(raw: string): LoanAction | null {
   const t = normalize(raw);
   const m = t.match(/^(قرضت|سلفت|استلفت|تسلفت|رد|ردلي|رجع|سددت|رديت|خلصت)\s+(.+)$/);
   if (!m) return null;
-  const words = m[2].split(" ").filter(Boolean);
+  const words = m[2]!.split(" ").filter(Boolean);
   const { account, rest } = detectAccount(words);
   let amount: number | null = null;
   const nameParts: string[] = [];
   for (const w of rest) {
-    const a = amount === null ? parseAmountToken(w) : null;
+    const a: number | null = amount === null ? parseAmountToken(w) : null;
     if (a !== null) amount = a;
     else if (!["من", "ل", "الى", "لـ"].includes(w)) nameParts.push(w);
   }
@@ -100,9 +100,9 @@ export function parseTransfer(raw: string): { amount: number; to: Account } | nu
   const t = normalize(raw).replace(/^\/transfer\s*/, "حول ");
   const m = t.match(/^(حول|حولت)\s+(\S+)\s+(.+)$/);
   if (!m) return null;
-  const amount = parseAmountToken(m[2]);
+  const amount = parseAmountToken(m[2]!);
   if (!amount) return null;
-  const { account } = detectAccount(m[3].split(" "));
+  const { account } = detectAccount(m[3]!.split(" "));
   if (!account) return null;
   return { amount, to: account };
 }
@@ -110,7 +110,7 @@ export function parseTransfer(raw: string): { amount: number; to: Account } | nu
 export function fmt(n: number): string {
   const sign = n < 0 ? "-" : "";
   const abs = Math.abs(Math.round(n * 100) / 100);
-  const [int, dec] = abs.toString().split(".");
+  const [int = "0", dec] = abs.toString().split(".");
   return `${sign}${int.replace(/\B(?=(\d{3})+(?!\d))/g, " ")}${dec ? "," + dec : ""} دج`;
 }
 
@@ -119,7 +119,7 @@ export const NON_FLOW_CATEGORIES = ["تحويل", "تعديل", "قروض"];
 
 /** Algeria is UTC+1 with no DST. Returns UTC ISO bounds of a month. */
 export function monthBounds(ym: string): { start: string; end: string } {
-  const [y, m] = ym.split("-").map(Number);
+  const [y = 2000, m = 1] = ym.split("-").map(Number);
   const start = new Date(Date.UTC(y, m - 1, 1, -1));
   const end = new Date(Date.UTC(y, m, 1, -1));
   return { start: start.toISOString(), end: end.toISOString() };
@@ -131,7 +131,7 @@ export function currentYm(d = new Date()): string {
 }
 
 export function shiftYm(ym: string, delta: number): string {
-  const [y, m] = ym.split("-").map(Number);
+  const [y = 2000, m = 1] = ym.split("-").map(Number);
   const d = new Date(Date.UTC(y, m - 1 + delta, 1));
   return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}`;
 }
