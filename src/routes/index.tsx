@@ -97,7 +97,7 @@ function Dashboard({ pw, logout }: { pw: string; logout: () => void }) {
   );
 }
 
-function Stat({ label, value }: { label: string; value?: number }) {
+function Stat({ label, value }: { label: string; value: number | undefined }) {
   return (
     <div className="rounded-2xl border bg-card/60 p-4 backdrop-blur">
       <p className="text-xs text-muted-foreground">{label}</p>
