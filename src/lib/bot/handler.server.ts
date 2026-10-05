@@ -328,4 +328,5 @@ export async function handleUpdate(db: Db, update: any): Promise<unknown> {
     const chatId = update.message?.chat?.id ?? update.callback_query?.message?.chat?.id;
     if (chatId) await send(chatId, "⚠️ حدث خطأ، حاول مرة أخرى.").catch(() => {});
   }
+  return undefined;
 }
