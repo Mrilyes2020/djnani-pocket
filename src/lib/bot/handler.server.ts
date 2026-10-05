@@ -184,7 +184,7 @@ async function exportCsv(db: Db, chatId: number) {
 // ---------- message handling ----------
 async function handleText(db: Db, chatId: number, raw: string) {
   const text = raw.trim();
-  const cmd = text.split(/\s+/)[0].split("@")[0].toLowerCase();
+  const cmd = (text.split(/\s+/)[0] ?? "").split("@")[0]!.toLowerCase();
 
   if (cmd === "/start" || cmd === "/menu") {
     await send(chatId, "👋", REPLY_KB);
@@ -199,7 +199,7 @@ async function handleText(db: Db, chatId: number, raw: string) {
   if (cmd === "/undo") {
     const { data } = await db.from("transactions").select("id").order("created_at", { ascending: false }).limit(1);
     if (!data?.length) return send(chatId, "لا توجد عمليات للحذف.");
-    await deleteTx(db, data[0].id);
+    await deleteTx(db, data[0]!.id);
     return send(chatId, `🗑️ تم حذف آخر عملية.\n\n${balanceLines(await balances(db))}`);
   }
   if (cmd === "/edit") {
@@ -311,7 +311,7 @@ async function handleCallback(db: Db, cq: any) {
   }
 }
 
-export async function handleUpdate(db: Db, update: any) {
+export async function handleUpdate(db: Db, update: any): Promise<unknown> {
   const allowed = String(process.env["ALLOWED_TELEGRAM_ID"] ?? "").trim();
   const fromId = String(update.message?.from?.id ?? update.callback_query?.from?.id ?? "");
   if (!allowed || fromId !== allowed) {
