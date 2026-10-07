@@ -53,6 +53,63 @@ export type Database = {
         }
         Relationships: []
       }
+      budget_settings: {
+        Row: {
+          id: boolean
+          needs_pct: number
+          savings_pct: number
+          wants_pct: number
+        }
+        Insert: {
+          id?: boolean
+          needs_pct?: number
+          savings_pct?: number
+          wants_pct?: number
+        }
+        Update: {
+          id?: boolean
+          needs_pct?: number
+          savings_pct?: number
+          wants_pct?: number
+        }
+        Relationships: []
+      }
+      budget_warnings: {
+        Row: {
+          bucket: string
+          created_at: string
+          level: number
+          ym: string
+        }
+        Insert: {
+          bucket: string
+          created_at?: string
+          level: number
+          ym: string
+        }
+        Update: {
+          bucket?: string
+          created_at?: string
+          level?: number
+          ym?: string
+        }
+        Relationships: []
+      }
+      category_buckets: {
+        Row: {
+          bucket: string
+          category: string
+        }
+        Insert: {
+          bucket: string
+          category: string
+        }
+        Update: {
+          bucket?: string
+          category?: string
+        }
+        Relationships: []
+      }
       category_keywords: {
         Row: {
           category: string
