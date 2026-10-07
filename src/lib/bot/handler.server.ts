@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import {
-  ACCOUNT_LABEL, NON_FLOW_CATEGORIES, currentYm, fmt, localDate, matchCategory, monthBounds,
+  ACCOUNT_LABEL, NON_FLOW_CATEGORIES, currentYm, fmt, formatAmount, localDate, matchCategory, monthBounds,
   normalize, parseAmountToken, parseLoan, parseTransaction, parseTransfer, shiftYm, type Account,
 } from "./parse";
 
@@ -80,7 +80,7 @@ async function lastText(db: Db) {
   if (!data?.length) return "لا توجد عمليات بعد.";
   const lines = data.map((t) => {
     const a = Number(t.amount);
-    return `${a >= 0 ? "🟢" : "🔴"} ${localDate(t.created_at)} | ${fmt(a)} | ${ACCOUNT_LABEL[t.account as Account]} | ${t.category}${t.note ? ` — ${t.note}` : ""}`;
+    return `${a >= 0 ? "🟢" : "🔴"} ${localDate(t.created_at)} | ${ACCOUNT_LABEL[t.account as Account]}: ${fmt(a)} | ${t.category}${t.note ? ` — ${t.note}` : ""}`;
   });
   return `📜 آخر العمليات\n\n${lines.join("\n")}`;
 }
@@ -172,10 +172,10 @@ async function exportCsv(db: Db, chatId: number) {
   if (error) throw error;
   const esc = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
   const csv = "\uFEFFdate,amount,account,category,note\n" +
-    (data ?? []).map((t) => [t.created_at, t.amount, t.account, t.category, t.note].map(esc).join(",")).join("\n");
+    (data ?? []).map((t) => [t.created_at, formatAmount(Number(t.amount)), t.account, t.category, t.note].map(esc).join(",")).join("\n");
   const form = new FormData();
   form.append("chat_id", String(chatId));
-  form.append("caption", `📤 ${data?.length ?? 0} عملية`);
+  form.append("caption", `📤 ${formatAmount(data?.length ?? 0)} عملية`);
   form.append("document", new Blob([csv], { type: "text/csv" }), `transactions-${currentYm()}.csv`);
   const res = await fetch(tgUrl("sendDocument"), { method: "POST", body: form });
   if (!res.ok) throw new Error(`sendDocument [${res.status}]: ${await res.text()}`);
@@ -235,7 +235,7 @@ async function handleText(db: Db, chatId: number, raw: string) {
     ]);
     if (error) throw error;
     const { data } = await db.from("transactions").select("id").eq("transfer_id", transfer_id).limit(1);
-    return send(chatId, `🔁 تم التحويل: ${fmt(tr.amount)} ← ${ACCOUNT_LABEL[tr.to]}\n\n${balanceLines(await balances(db))}`,
+    return send(chatId, `🔁 تم التحويل: ${ACCOUNT_LABEL[tr.to]}: ${fmt(tr.amount)}\n\n${balanceLines(await balances(db))}`,
       data?.[0] ? undoKb(data[0].id) : undefined);
   }
 
@@ -277,7 +277,7 @@ async function handleText(db: Db, chatId: number, raw: string) {
   const id = await insertTx(db, { amount: p.amount, account, category, note: p.words.join(" ") || null });
   const b = await balances(db);
   return send(chatId,
-    `✅ تم تسجيل العملية!\n${p.amount >= 0 ? "🟢" : "🔴"} ${fmt(p.amount)} · ${ACCOUNT_LABEL[account]}\n📁 الفئة: ${category}\n\n${balanceLines(b)}`,
+    `✅ تم تسجيل العملية!\n${p.amount >= 0 ? "🟢" : "🔴"} ${ACCOUNT_LABEL[account]}: ${fmt(p.amount)}\n📁 الفئة: ${category}\n\n${balanceLines(b)}`,
     undoKb(id));
 }
 

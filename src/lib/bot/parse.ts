@@ -107,11 +107,14 @@ export function parseTransfer(raw: string): { amount: number; to: Account } | nu
   return { amount, to: account };
 }
 
-export function fmt(n: number): string {
-  const sign = n < 0 ? "-" : "";
-  const abs = Math.abs(Math.round(n * 100) / 100);
-  const [int = "0", dec] = abs.toString().split(".");
-  return `${sign}${int.replace(/\B(?=(\d{3})+(?!\d))/g, " ")}${dec ? "," + dec : ""} دج`;
+/** Plain digits, without grouping; fractional values keep at most two decimals. */
+export function formatAmount(n: number): string {
+  return Number.isInteger(n) ? String(Math.round(n)) : String(Number(n.toFixed(2)));
+}
+
+/** Isolate the entire signed amount and currency from surrounding Arabic text. */
+export function fmt(n: number, showPlus = false): string {
+  return `\u2066${showPlus && n >= 0 ? "+" : ""}${formatAmount(n)} دج\u2069`;
 }
 
 export const ACCOUNT_LABEL: Record<Account, string> = { pocket: "الجيب", bank: "البنك" };
