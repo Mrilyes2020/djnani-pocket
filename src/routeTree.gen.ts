@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as ApiPublicTelegramReminderRouteImport } from './routes/api/public/telegram/reminder'
 import { Route as ApiPublicTelegramWebhookRouteImport } from './routes/api/public/telegram/webhook'
 
 const IndexRoute = IndexRouteImport.update({
@@ -23,6 +24,12 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicTelegramReminderRoute =
+  ApiPublicTelegramReminderRouteImport.update({
+    id: '/api/public/telegram/reminder',
+    path: '/api/public/telegram/reminder',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicTelegramWebhookRoute =
   ApiPublicTelegramWebhookRouteImport.update({
     id: '/api/public/telegram/webhook',
@@ -33,30 +40,47 @@ const ApiPublicTelegramWebhookRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/api/public/telegram/reminder': typeof ApiPublicTelegramReminderRoute
   '/api/public/telegram/webhook': typeof ApiPublicTelegramWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/api/public/telegram/reminder': typeof ApiPublicTelegramReminderRoute
   '/api/public/telegram/webhook': typeof ApiPublicTelegramWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/api/public/telegram/reminder': typeof ApiPublicTelegramReminderRoute
   '/api/public/telegram/webhook': typeof ApiPublicTelegramWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/api/public/telegram/webhook'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/api/public/telegram/reminder'
+    | '/api/public/telegram/webhook'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/api/public/telegram/webhook'
-  id: '__root__' | '/' | '/admin' | '/api/public/telegram/webhook'
+  to:
+    | '/'
+    | '/admin'
+    | '/api/public/telegram/reminder'
+    | '/api/public/telegram/webhook'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/api/public/telegram/reminder'
+    | '/api/public/telegram/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
+  ApiPublicTelegramReminderRoute: typeof ApiPublicTelegramReminderRoute
   ApiPublicTelegramWebhookRoute: typeof ApiPublicTelegramWebhookRoute
 }
 
@@ -76,6 +100,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/telegram/reminder': {
+      id: '/api/public/telegram/reminder'
+      path: '/api/public/telegram/reminder'
+      fullPath: '/api/public/telegram/reminder'
+      preLoaderRoute: typeof ApiPublicTelegramReminderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/telegram/webhook': {
       id: '/api/public/telegram/webhook'
       path: '/api/public/telegram/webhook'
@@ -89,6 +120,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
+  ApiPublicTelegramReminderRoute: ApiPublicTelegramReminderRoute,
   ApiPublicTelegramWebhookRoute: ApiPublicTelegramWebhookRoute,
 }
 export const routeTree = rootRouteImport
