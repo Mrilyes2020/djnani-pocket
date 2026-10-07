@@ -3,6 +3,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { getWebhookInfo, setWebhook } from "@/lib/admin.functions";
 import { PasswordGate } from "@/components/PasswordGate";
+import { formatAmount } from "@/lib/bot/parse";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/admin")({
@@ -12,6 +13,8 @@ export const Route = createFileRoute("/admin")({
       { name: "description", content: "ربط بوت تيليغرام ومتابعة حالته." },
       { property: "og:title", content: "محفظتي — إعدادات البوت" },
       { property: "og:description", content: "ربط بوت تيليغرام ومتابعة حالته." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: () => <PasswordGate>{(pw) => <Admin pw={pw} />}</PasswordGate>,
@@ -46,7 +49,7 @@ function Admin({ pw }: { pw: string }) {
           <>
             <Row k="الحالة" v={q.data.url ? "✅ مربوط" : "❌ غير مربوط"} />
             <Row k="الرابط" v={q.data.url || "—"} ltr />
-            <Row k="رسائل معلقة" v={String(q.data.pending)} />
+            <Row k="رسائل معلقة" v={formatAmount(q.data.pending)} />
             <Row k="معرّفك محفوظ" v={q.data.allowedIdSet ? "✅" : "❌"} />
             {q.data.lastError && <Row k="آخر خطأ" v={q.data.lastError} />}
           </>

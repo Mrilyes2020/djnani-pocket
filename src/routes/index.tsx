@@ -13,6 +13,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "الرصيد، آخر العمليات ومصاريف الشهر حسب الفئة." },
       { property: "og:title", content: "محفظتي — لوحة الرصيد" },
       { property: "og:description", content: "الرصيد، آخر العمليات ومصاريف الشهر حسب الفئة." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: () => <PasswordGate>{(pw, logout) => <Dashboard pw={pw} logout={logout} />}</PasswordGate>,
@@ -86,7 +88,7 @@ function Dashboard({ pw, logout }: { pw: string; logout: () => void }) {
                 </p>
               </div>
               <span dir="ltr" className={t.amount >= 0 ? "text-income font-bold" : "text-expense font-bold"}>
-                {t.amount >= 0 ? "+" : ""}{fmt(t.amount)}
+                {fmt(t.amount)}
               </span>
             </li>
           ))}
