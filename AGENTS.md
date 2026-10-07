@@ -14,4 +14,4 @@
 - Bot tables are service-role only (RLS on, no policies); web pages read via password-checked server functions — keeps personal finance data private.
 - Balances are always computed from SUM(transactions); never stored.
 - All displayed money uses formatAmount in parse.ts via the currency-isolating fmt wrapper; CSV uses formatAmount directly to preserve numeric cells.
-- Daily reminders use pg_cron calling a TanStack public route with a private Vault token verified by a service-role-only function, never a publishable key.
+- Daily reminders use pg_cron calling a TanStack public route with a private database-generated token in a service-role-only table, verified by a service-role-only function, never a publishable key.
