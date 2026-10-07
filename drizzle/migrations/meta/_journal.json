@@ -15,6 +15,13 @@
       "when": 1791385255673,
       "tag": "0001_telegram_reminder_schedule",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791385883691,
+      "tag": "0002_budget_rule",
+      "breakpoints": true
     }
   ]
 }
