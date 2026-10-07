@@ -32,7 +32,7 @@ function Calendar({
       )}
       captionLayout={captionLayout}
       formatters={{
-        formatMonthDropdown: (date) => date.toLocaleString("default", { month: "short" }),
+        formatMonthDropdown: (date) => new Intl.DateTimeFormat(undefined, { month: "short" }).format(date),
         ...formatters,
       }}
       classNames={{
