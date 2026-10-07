@@ -38,6 +38,21 @@ export type Database = {
         }
         Relationships: []
       }
+      bot_reminder_credentials: {
+        Row: {
+          id: boolean
+          token: string
+        }
+        Insert: {
+          id?: boolean
+          token?: string
+        }
+        Update: {
+          id?: boolean
+          token?: string
+        }
+        Relationships: []
+      }
       category_keywords: {
         Row: {
           category: string
@@ -130,7 +145,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      verify_telegram_reminder_token: {
+        Args: { token: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
