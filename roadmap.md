@@ -1,3 +1,4 @@
-- [ ] Unify ungrouped decimal amount formatting and RTL isolates across bot, CSV and dashboard.
-- [ ] Add three daily Telegram reminders at 09:00, 15:00 and 21:00 Algeria time.
-- [ ] Verify formatting, reminder authentication and schedules.
+- [x] Unify ungrouped decimal amount formatting and RTL isolates across bot, CSV and dashboard.
+- [x] Add three daily Telegram reminders at 09:00, 15:00 and 21:00 Algeria time.
+- [x] Verify formatting, reminder authentication and schedules.
+- [ ] Activate reminder delivery on the published site — requires the user to publish this update.

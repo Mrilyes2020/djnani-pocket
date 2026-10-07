@@ -88,7 +88,7 @@ function Dashboard({ pw, logout }: { pw: string; logout: () => void }) {
                 </p>
               </div>
               <span dir="ltr" className={t.amount >= 0 ? "text-income font-bold" : "text-expense font-bold"}>
-                {fmt(t.amount)}
+                {fmt(t.amount, true)}
               </span>
             </li>
           ))}

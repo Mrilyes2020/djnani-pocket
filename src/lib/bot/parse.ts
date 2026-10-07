@@ -113,8 +113,8 @@ export function formatAmount(n: number): string {
 }
 
 /** Isolate the entire signed amount and currency from surrounding Arabic text. */
-export function fmt(n: number): string {
-  return `\u2066${formatAmount(n)} دج\u2069`;
+export function fmt(n: number, showPlus = false): string {
+  return `\u2066${showPlus && n >= 0 ? "+" : ""}${formatAmount(n)} دج\u2069`;
 }
 
 export const ACCOUNT_LABEL: Record<Account, string> = { pocket: "الجيب", bank: "البنك" };
